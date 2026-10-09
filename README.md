@@ -29,6 +29,7 @@ npm run demo
 | `--host` | `HOST` | `127.0.0.1` |
 | `--interval` (ms) | `PASEO_DASHBOARD_INTERVAL` | `4000` |
 | `--demo` | `PASEO_DASHBOARD_DEMO=1` | désactivé |
+| `--auth` (`user:motdepasse`) | `PASEO_DASHBOARD_AUTH` | aucune |
 
 Daemon sur une autre machine (devbox, homelab) :
 
@@ -36,7 +37,7 @@ Daemon sur une autre machine (devbox, homelab) :
 npm start -- --url ws://devbox:6767/ws --password "$PASEO_PASSWORD"
 ```
 
-Le serveur écoute sur `127.0.0.1` par défaut : il affiche les titres de vos tâches, ne l'exposez pas sur le réseau sans protection.
+Le serveur écoute sur `127.0.0.1` par défaut : il affiche les titres de vos tâches. Pour l'exposer, mettez-le derrière un reverse proxy HTTPS et passez `--auth user:motdepasse` (authentification HTTP Basic) : sans cela, il refuse d'écouter ailleurs que sur `127.0.0.1`.
 
 ## Ce que montre la page Tâches
 
@@ -88,4 +89,10 @@ Le daemon Paseo écoute sur `127.0.0.1:8167` et le dashboard sur `127.0.0.1:8170
 PASEO_URL=ws://127.0.0.1:8167/ws PORT=8170 node server.mjs
 ```
 
-Depuis votre poste : `ssh -L 8170:127.0.0.1:8170 paul@ai-dedicated-server`, puis http://127.0.0.1:8170.
+Le mot de passe et les variables sont dans `~/.config/paseo-dashboard/env` (mode 600) :
+
+```bash
+set -a; . ~/.config/paseo-dashboard/env; set +a; node server.mjs
+```
+
+Sur le web : via le nginx du serveur, vhost `paseo.paul.<domaine du serveur>` gardé dans `~/.config/paseo-dashboard/nginx.conf` (à installer en root dans `/etc/nginx/sites-available/` et à lier dans `sites-enabled/`). Sans nginx, le tunnel SSH `ssh -L 8170:127.0.0.1:8170 paul@ai-dedicated-server` puis http://127.0.0.1:8170.

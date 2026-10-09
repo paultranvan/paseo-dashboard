@@ -7,6 +7,7 @@ import { readFile } from "node:fs/promises";
 import { extname, join, normalize as normPath, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
+import { timingSafeEqual } from "node:crypto";
 import { normalize } from "./lib/normalize.mjs";
 import { createPaseoSource } from "./lib/source-paseo.mjs";
 import { createDemoSource } from "./lib/source-demo.mjs";
@@ -23,8 +24,24 @@ const { values: args } = parseArgs({
     port: { type: "string", default: process.env.PORT ?? "4317" },
     host: { type: "string", default: process.env.HOST ?? "127.0.0.1" },
     interval: { type: "string", default: process.env.PASEO_DASHBOARD_INTERVAL ?? "4000" },
+    auth: { type: "string", default: process.env.PASEO_DASHBOARD_AUTH },
   },
 });
+
+// HTTP Basic auth, "user:password". Required as soon as the server leaves loopback.
+const LOOPBACK = new Set(["127.0.0.1", "localhost", "::1"]);
+const authSecret = args.auth ? Buffer.from(args.auth) : null;
+if (!authSecret && !LOOPBACK.has(args.host)) {
+  console.error(`Refus d'écouter sur ${args.host} sans --auth user:motdepasse (ou PASEO_DASHBOARD_AUTH).`);
+  process.exit(1);
+}
+function authorized(req) {
+  if (!authSecret) return true;
+  const header = req.headers.authorization ?? "";
+  if (!header.startsWith("Basic ")) return false;
+  const given = Buffer.from(header.slice(6), "base64");
+  return given.length === authSecret.length && timingSafeEqual(given, authSecret);
+}
 
 const pollMs = Math.max(1000, Number(args.interval) || 4000);
 const source = args.demo
@@ -87,6 +104,10 @@ const MIME = {
 };
 
 const server = createServer(async (req, res) => {
+  if (!authorized(req)) {
+    res.writeHead(401, { "www-authenticate": 'Basic realm="Paseo dashboard", charset="UTF-8"' }).end();
+    return;
+  }
   const url = new URL(req.url, "http://localhost");
   if (url.pathname === "/api/state") {
     res.writeHead(200, { "content-type": "application/json", "cache-control": "no-store" });
