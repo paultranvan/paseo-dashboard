@@ -79,3 +79,13 @@ npm test
 - `tests/normalize.test.mjs` : règles d'états, rattachement des agents aux workspaces, planifications.
 - `tests/e2e-demo.test.mjs` : serveur + navigateur sur la flotte de démo figée (compteurs, filtres, recherche, détail, replis persistants, vue par état, métriques recoupées avec les données brutes, thème sombre, clavier, mobile).
 - `tests/e2e-paseo.test.mjs` : chemin complet via la source Paseo, avec un module qui imite le SDK et ses payloads (pagination, agents archivés, planifications, mise à jour en direct sans recharger, panne puis reprise du daemon).
+
+## Sur ai-dedicated-server
+
+Le daemon Paseo écoute sur `127.0.0.1:8167` et le dashboard sur `127.0.0.1:8170` (plage de ports de paul). Installer avec `pnpm install` (pas de `yarn.lock`), puis :
+
+```bash
+PASEO_URL=ws://127.0.0.1:8167/ws PORT=8170 node server.mjs
+```
+
+Depuis votre poste : `ssh -L 8170:127.0.0.1:8170 paul@ai-dedicated-server`, puis http://127.0.0.1:8170.
