@@ -1116,7 +1116,7 @@ window.addEventListener("hashchange", routeFromHash);
 function connect() {
   let es;
   try {
-    es = new EventSource("/api/events");
+    es = new EventSource("api/events");
   } catch {
     return poll();
   }
@@ -1133,7 +1133,7 @@ function connect() {
 }
 async function poll() {
   try {
-    const r = await fetch("/api/state");
+    const r = await fetch("api/state");
     ui.snap = await r.json();
     render();
   } catch {}

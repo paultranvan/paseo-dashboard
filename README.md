@@ -95,4 +95,4 @@ Le mot de passe et les variables sont dans `~/.config/paseo-dashboard/env` (mode
 set -a; . ~/.config/paseo-dashboard/env; set +a; node server.mjs
 ```
 
-Sur le web : via le nginx du serveur, vhost `paseo.paul.<domaine du serveur>` gardé dans `~/.config/paseo-dashboard/nginx.conf` (à installer en root dans `/etc/nginx/sites-available/` et à lier dans `sites-enabled/`). Sans nginx, le tunnel SSH `ssh -L 8170:127.0.0.1:8170 paul@ai-dedicated-server` puis http://127.0.0.1:8170.
+Sur le web : `https://paul.<domaine du serveur>/dashboard/`, un bloc `location /dashboard/` dans le vhost nginx de l'instance Cozy (copie modifiée gardée dans `~/.config/paseo-dashboard/cozy-paul.conf`, à installer en root). Sans nginx, le tunnel SSH `ssh -L 8170:127.0.0.1:8170 paul@ai-dedicated-server` puis http://127.0.0.1:8170.
