@@ -1,0 +1,26 @@
+{
+  "name": "paseo-dashboard",
+  "version": "1.0.0",
+  "description": "Tableau de bord pour Paseo : vos tâches d'agents par workspace, et leurs métriques.",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "paseo-dashboard": "./server.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "demo": "node server.mjs --demo",
+    "test": "node --test --test-concurrency=1 \"tests/*.test.mjs\"",
+    "test:unit": "node --test tests/normalize.test.mjs",
+    "test:e2e": "node --test --test-concurrency=1 tests/e2e-demo.test.mjs tests/e2e-paseo.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@getpaseo/client": "^0.9.2"
+  },
+  "devDependencies": {
+    "playwright": "^1.50.0"
+  }
+}

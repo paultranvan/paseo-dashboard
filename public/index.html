@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paseo · Tableau de bord</title>
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23172033'/%3E%3Cpath d='M7 11h12M7 16h18M7 21h8' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="currentColor" />
+          <path d="M7 11h12M7 16h18M7 21h8" stroke="var(--bg)" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <span>Paseo <small>tableau de bord</small></span>
+      </div>
+      <nav class="tabs" aria-label="Pages">
+        <a href="#/" data-route="tasks">Tâches</a>
+        <a href="#/metriques" data-route="metrics">Métriques</a>
+      </nav>
+      <div class="spacer"></div>
+      <div class="conn" id="conn" data-status="connecting" role="status" aria-live="polite">
+        <span class="dot"></span><span class="conn-label">Connexion…</span>
+      </div>
+      <button class="icon-btn" id="theme" type="button" aria-label="Changer de thème" title="Changer de thème">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5" />
+          <path d="M8 2a6 6 0 0 1 0 12z" fill="currentColor" />
+        </svg>
+      </button>
+    </header>
+    <main id="app" aria-live="off"></main>
+    <div id="overlay"></div>
+    <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
